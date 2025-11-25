@@ -2,11 +2,11 @@
 
 Official code repository for
 
-[Learning Massively Multitask World Models for Continuous Control](https://newt-world-models.github.io)
+[Learning Massively Multitask World Models for Continuous Control](https://www.nicklashansen.com/NewtWM)
 
 [Nicklas Hansen](https://nicklashansen.github.io), [Hao Su](https://cseweb.ucsd.edu/~haosu)\*, [Xiaolong Wang](https://xiaolonw.github.io)\* (UC San Diego)</br>
 
-[[Website]](https://www.nicklashansen.com/NewtWM/) [[Paper]](https://www.nicklashansen.com/NewtWM/newt.pdf) [[Models]](https://huggingface.co/nicklashansen/newt) [[Dataset]](https://huggingface.co/datasets/nicklashansen/mmbench)
+[[Website]](https://www.nicklashansen.com/NewtWM) [[Paper]](https://www.nicklashansen.com/NewtWM/newt.pdf) [[Models]](https://huggingface.co/nicklashansen/newt) [[Dataset]](https://huggingface.co/datasets/nicklashansen/mmbench)
 
 ----
 
