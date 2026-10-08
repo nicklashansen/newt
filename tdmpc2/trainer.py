@@ -216,6 +216,7 @@ class Trainer():
 		if self.cfg.rank == 0:
 			print(f'Training agent for {self.cfg.steps:,} steps...')
 		train_metrics = defaultdict(list)
+		env_indices = torch.arange(self.cfg.num_envs, device='cpu')
 		while self._step <= self.cfg.steps:
 
 			# Evaluate agent periodically
@@ -236,7 +237,7 @@ class Trainer():
 				ep_len = torch.zeros((self.cfg.num_envs,), dtype=torch.int32)
 				done = torch.full((self.cfg.num_envs,), True, dtype=torch.bool)
 				self._next_action = None
-				self._tds[ep_len] = self.to_td(obs)
+				self._tds[0] = self.to_td(obs)
 
 			# Collect experience
 			use_mpc = self._step >= self.cfg.seeding_coef * self._update_freq
@@ -260,7 +261,8 @@ class Trainer():
 			if 'final_observation' in info:
 				_obs[done] = info['final_observation']
 			td = self.to_td(_obs, action, reward, terminated)
-			self._tds[ep_len] = td
+			# Each environment may be at a different step in its episode.
+			self._tds[ep_len, env_indices] = td
 			if done.any():
 				max_ep_len = ep_len.max()
 
@@ -283,6 +285,10 @@ class Trainer():
 						# Reset episode metrics
 						ep_reward[i] = 0.0
 						ep_len[i] = 0
+
+				# Same-step autoreset returns the next initial observation in obs.
+				reset_td = self.to_td(obs, action=torch.full_like(action, float('nan')))
+				self._tds[0, done] = reset_td[done]
 				
 				# Log and reset metrics if enough data is collected
 				if max_ep_len >= self.cfg.episode_length:
